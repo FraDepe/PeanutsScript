@@ -2,8 +2,8 @@
 Script used to fetch snoopy illustration from IlPost website
 
 ## Usage
-Clone this repo and execute getPeanuts.sh. Be sure that getPeanuts.sh and peanuts.py are in same folder.
-The script uses display to show the latest image, but you can change it using -p option.
+Clone this repo and execute getPeanuts.sh. Be sure that getPeanuts.sh and peanuts.py are in same folder.  
+The script uses display to show the latest image, but you can change it using -p option.  
 Use -h for more infos
 
 ### Python requirements
