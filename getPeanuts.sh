@@ -1,6 +1,6 @@
 #script per avviare lo scraper e mostrare l'immagine
 
-script=`find $HOME -name "peanuts.py"`
+script=`find $(dirname "$0") -name "peanuts.py"` 
 
 python ${script}
 
