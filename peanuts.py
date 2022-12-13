@@ -7,7 +7,7 @@ import sys
 
 home_dir = os.path.expanduser('~')
 
-print("Check if the peanuts folder exists")
+print("Checking if the peanuts folder exists")
 
 if  "Pictures" in os.listdir(home_dir):
     if  "Peanuts" not in os.listdir(home_dir+"/Pictures"):
