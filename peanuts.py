@@ -5,38 +5,46 @@ import shutil
 import os
 import sys
 
-home_dir = os.path.expanduser('~')
 
-print("Checking if the peanuts folder exists")
+option = False
+if len(sys.argv) > 1:
+    option = True
+    peanuts_dir = sys.argv[1]
+    print("Storing image in "+peanuts_dir)
 
-if  "Pictures" in os.listdir(home_dir):
-    if  "Peanuts" not in os.listdir(home_dir+"/Pictures"):
-        
-        boolean = input("Peanuts folder doesn't exist. Would you like to create one? [y/n]")
-        if boolean == "y" or boolean == "Y":
-            print("Creating Peanuts folder")
-            os.makedirs(home_dir+"/Pictures/Peanuts")
-        else:
-            print("Adapt the script")
-            quit()
-
-    peanuts_dir = home_dir+"/Pictures/Peanuts"
-
-elif "Immagini" in os.listdir(home_dir):
-    if  "Peanuts" not in os.listdir(home_dir+"/Immagini"):
-
-        boolean = input("Peanuts folder doesn't exist. Would you like to create one? [y/n]")
-        if boolean == "y" or boolean == "Y":
-            print("Creating Peanuts folder")
-            os.makedirs(home_dir+"/Immagini/Peanuts")
-        else:
-            print("Adapt the script")
-            quit()
-
-    peanuts_dir = home_dir+"/Immagini/Peanuts"
 else:
-    print("Your system language is not supported. Please adapt this program")
-    #You should change one case and change Pictures or Immagini with your word
+
+    home_dir = os.path.expanduser('~')
+    print("Checking if the peanuts folder exists")
+
+    if  "Pictures" in os.listdir(home_dir):
+        if  "Peanuts" not in os.listdir(home_dir+"/Pictures"):
+            
+            boolean = input("Peanuts folder doesn't exist. Would you like to create one? [y/n]")
+            if boolean == "y" or boolean == "Y":
+                print("Creating Peanuts folder")
+                os.makedirs(home_dir+"/Pictures/Peanuts")
+            else:
+                print("Adapt the script")
+                quit()
+
+        peanuts_dir = home_dir+"/Pictures/Peanuts"
+
+    elif "Immagini" in os.listdir(home_dir):
+        if  "Peanuts" not in os.listdir(home_dir+"/Immagini"):
+
+            boolean = input("Peanuts folder doesn't exist. Would you like to create one? [y/n]")
+            if boolean == "y" or boolean == "Y":
+                print("Creating Peanuts folder")
+                os.makedirs(home_dir+"/Immagini/Peanuts")
+            else:
+                print("Adapt the script")
+                quit()
+
+        peanuts_dir = home_dir+"/Immagini/Peanuts"
+    else:
+        print("Your system language is not supported. Please adapt this program")
+        #You should change one case and change Pictures or Immagini with your word
 
 today = str(date.today()).split("-")
 year = today[0]

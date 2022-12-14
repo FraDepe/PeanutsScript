@@ -1,8 +1,14 @@
 #script per avviare lo scraper e mostrare l'immagine
 main() {
-   script_name=$1
+    script_name=$1
 
-   python ${script}
+    python ${script} 
+}
+
+main_custom_path() {
+    script_name=$1
+
+    python ${script} $2
 }
 
 show(){
@@ -24,11 +30,12 @@ help() {
     # Display Help
     echo "Options to show or not downloaded image"
     echo
-    echo "Syntax: getPeanuts.sh [-h|s]"
+    echo "Syntax: getPeanuts.sh [-s|h|c|p]"
     echo "options:"
     echo "s     Save and show latest illustration."
     echo "h     Print this Help."
-    echo "p     Specify commanf to show iamge (default is display)."
+    echo "c     Specify commanf to show iamge (default is display)."
+    echo "p     Specify path (absolute) where to download image"
     echo "WIth no options will just download newer illustration"
     echo
 
@@ -55,7 +62,7 @@ custom_show(){
 script=`find $(dirname "$0") -name "peanuts.py"`
 peanuts_folder=`find $HOME -name "Peanuts"`
 
-while getopts ":h :s p:" option; do
+while getopts ":h :s c: p:" option; do
     case $option in 
         h) # display Help
             help
@@ -64,10 +71,14 @@ while getopts ":h :s p:" option; do
             main "$script"
             show "$peanuts_folder"
             exit;;
-        p) 
+        c) 
             command=$OPTARG
             main "$script"
             custom_show "$command" "$peanuts_folder"
+            exit;;
+        p) 
+            path=$OPTARG
+            main_custom_path "$script" $path
             exit;;
         \?) # Invalid option
             echo "Error: Invalid option"
