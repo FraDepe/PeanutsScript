@@ -34,7 +34,7 @@ help() {
     echo "options:"
     echo "s     Save and show latest illustration."
     echo "h     Print this Help."
-    echo "c     Specify commanf to show iamge (default is display)."
+    echo "c     Specify command to show image (default is display)."
     echo "p     Specify path (absolute) where to download image"
     echo "WIth no options will just download newer illustration"
     echo
