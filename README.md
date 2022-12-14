@@ -13,3 +13,5 @@ Use -h for more infos
   * os (Should be already installed)
   * sys (Should be already installed)
   * datetime (Should be already installed)
+
+###### https://github.com/FraDepe
