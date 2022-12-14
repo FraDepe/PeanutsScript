@@ -137,8 +137,3 @@ elif sys.platform == "win32":
     del response_src
 
     print("Illustration saved")
-
-    #with open("/home/fradepe/Coding/Python/Peanuts/site.html", 'w') as file_html:
-    #    file_html.write(response.content.decode())
-
-    # wp-post-image
