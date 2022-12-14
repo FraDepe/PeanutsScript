@@ -2,13 +2,25 @@
 main() {
     script_name=$1
 
-    python ${script} 
+    if [[ `which python` == *"python" ]] 
+    then
+        python ${script}
+    else
+        python3 ${script}
+    fi
+
+     
 }
 
 main_custom_path() {
     script_name=$1
 
-    python ${script} $2
+    if [[ `which python` == *"python" ]] 
+    then
+        python ${script} $2
+    else
+        python3 ${script} $2
+    fi
 }
 
 show(){
