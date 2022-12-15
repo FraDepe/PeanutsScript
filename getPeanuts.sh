@@ -2,24 +2,28 @@
 main() {
     script_name=$1
 
-    if [[ `which python` == *"python" ]] 
+    if [[ `which python` == *"/python" ]] 
     then
         python ${script}
-    else
+    elif [[ `which python3` == *"/python3" ]]
+    then
         python3 ${script}
+    else
+        echo "please install python or python3"
     fi
-
-     
 }
 
 main_custom_path() {
     script_name=$1
 
-    if [[ `which python` == *"python" ]] 
+    if [[ `which python` == *"/python" ]] 
     then
-        python ${script} $2
+        python ${script}
+    elif [[ `which python3` == *"/python3" ]]
+    then
+        python3 ${script}
     else
-        python3 ${script} $2
+        echo "please install python or python3"
     fi
 }
 
@@ -33,7 +37,12 @@ show(){
 
     echo "Loading image"
 
-    display ${img}&
+    if [[ `which display` == *"/display" ]] 
+    then
+        display ${img}&
+    else
+        echo "please install display or choose a different command using -c option"
+    fi
 
 }
 

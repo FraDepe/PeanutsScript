@@ -1,6 +1,17 @@
-import requests
+try:
+    import requests
+except ModuleNotFoundError:
+    print("module 'requests' is not installed")
+    quit()
+    
 from datetime import date
-from requests_html import HTMLSession
+
+try:
+    from requests_html import HTMLSession
+except ModuleNotFoundError:
+    print("module 'requests_html' is not installed")
+    quit()
+
 import shutil
 import os
 import sys
