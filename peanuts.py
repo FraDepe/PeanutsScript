@@ -51,7 +51,7 @@ config_path = os.path.join(here, "peanuts_config.json")
 
 with open(config_path, 'r+') as config_file:
 
-    if os.stat(config_path).st_size != 0:
+    if os.stat(config_path).st_size > 1:
         peanuts_folder = json.load(config_file)["path"]
     
     else:
@@ -74,6 +74,7 @@ with open(config_path, 'r+') as config_file:
 
         elif choose == "n":
             peanuts_folder = input("Type the absolute path you want to use ")
+            os.makedirs(peanuts_folder)
         
         else:
             print("Invalid answer")
