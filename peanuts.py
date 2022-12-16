@@ -12,51 +12,14 @@ except ModuleNotFoundError:
     print("module 'requests_html' is not installed")
     quit()
 
+import json
 import shutil
 import os
 import sys
 
 
-option = False
-if len(sys.argv) > 1:
-    option = True
-    peanuts_dir = sys.argv[1]
-    print("Storing image in "+peanuts_dir)
 
-else:
-
-    home_dir = os.path.expanduser('~')
-    print("Checking if the peanuts folder exists")
-
-    if  "Pictures" in os.listdir(home_dir):
-        if  "Peanuts" not in os.listdir(home_dir+"/Pictures"):
-            
-            boolean = input("Peanuts folder doesn't exist. Would you like to create one? [y/n]")
-            if boolean == "y" or boolean == "Y":
-                print("Creating Peanuts folder")
-                os.makedirs(home_dir+"/Pictures/Peanuts")
-            else:
-                print("Adapt the script")
-                quit()
-
-        peanuts_dir = home_dir+"/Pictures/Peanuts"
-
-    elif "Immagini" in os.listdir(home_dir):
-        if  "Peanuts" not in os.listdir(home_dir+"/Immagini"):
-
-            boolean = input("Peanuts folder doesn't exist. Would you like to create one? [y/n]")
-            if boolean == "y" or boolean == "Y":
-                print("Creating Peanuts folder")
-                os.makedirs(home_dir+"/Immagini/Peanuts")
-            else:
-                print("Adapt the script")
-                quit()
-
-        peanuts_dir = home_dir+"/Immagini/Peanuts"
-    else:
-        print("Your system language is not supported. Please adapt this program")
-        #You should change one case and change Pictures or Immagini with your word
-
+#Getting actual date
 today = str(date.today()).split("-")
 year = today[0]
 month = today[1]
@@ -77,74 +40,79 @@ mesi = {
     "12": "dicembre"
 }
 
+
+
+# Getting folder to use to store images
+home_dir = os.path.expanduser('~')
+
+here = os.path.dirname(os.path.abspath(__file__))
+
+config_path = os.path.join(here, "peanuts_config.json")
+
+with open(config_path, 'r+') as config_file:
+
+    if os.stat(config_path).st_size != 0:
+        peanuts_folder = json.load(config_file)["path"]
+    
+    else:
+        choose = input("Configuration file with directory to store images is empty.\nDo i save in Pictures folder? [y/n] ")
+    
+        if choose == "y":
+    
+            if "Pictures" in os.listdir(home_dir):
+                peanuts_folder = home_dir+"/Pictures/Peanuts"
+                os.makedirs(peanuts_folder)
+    
+            elif "Immagini" in os.listdir(home_dir):
+                peanuts_folder = home_dir+"/Immagini/Peanuts"
+                os.makedirs(peanuts_folder)
+            
+            else:
+                print("Pictures or Immagini folder doesn't exist. Create it in home or change this script")
+                #You should change one case and change Pictures or Immagini with your word
+                quit()
+
+        elif choose == "n":
+            peanuts_folder = input("Type the absolute path you want to use ")
+        
+        else:
+            print("Invalid answer")
+            quit()
+    
+        #Saving path in json config
+        json.dump({"path": peanuts_folder}, config_file)
+
+#Starting scraping
 print("Today is "+str(date.today()))
 
 url_today = "https://www.ilpost.it/"+year+"/"+month+"/"+day+"/"+"peanuts-"+year+"-"+mesi[month]+"-"+day
 
+file_name =peanuts_folder+"/Peanuts-"+day+"-"+month+"-"+year+".jpg"
+short_file_name = "Peanuts-"+day+"-"+month+"-"+year+".jpg"
 
-# Linux systems
+print("Visiting "+url_today)
 
-if sys.platform == "linux" or sys.platform == "linux2":
-    file_name =peanuts_dir+"/Peanuts-"+day+"-"+month+"-"+year+".jpg"
-    short_file_name = "Peanuts-"+day+"-"+month+"-"+year+".jpg"
+if short_file_name in os.listdir(peanuts_folder):
 
-    print("Visiting "+url_today)
+    print("Illustration already saved")
+    quit()
 
-    if short_file_name in os.listdir(peanuts_dir):
+session = HTMLSession()
 
-        print("Illustration already saved")
-        quit()
+response = session.get(url_today)
 
-    session = HTMLSession()
+img_html_element = response.html.find('.wp-post-image')
 
-    response = session.get(url_today)
+url_img = img_html_element[0].attrs['src']
 
-    img_html_element = response.html.find('.wp-post-image')
+print("Fetching data from the website ")
 
-    url_img = img_html_element[0].attrs['src']
+response_src = requests.get(url_img, stream=True)
 
-    print("Fetching data from the website ")
+print("Getting source from "+url_img)
 
-    response_src = requests.get(url_img, stream=True)
+with open(file_name, 'wb') as out_file:
+    shutil.copyfileobj(response_src.raw, out_file)
+del response_src
 
-    print("Getting source from"+url_img)
-
-    with open(file_name, 'wb') as out_file:
-        shutil.copyfileobj(response_src.raw, out_file)
-    del response_src
-
-    print("Illustration saved")
-
-
-# Windows systems  DA COMPLETARE
-
-elif sys.platform == "win32":
-
-    file_name ="Peanuts-"+day+"-"+month+"-"+year+".jpg"
-
-    print("Visiting "+url_today)
-
-    if file_name in os.listdir("/home/fradepe/Immagini/Peanuts/"):
-
-        print("Illustration already saved")
-        quit()
-
-    session = HTMLSession()
-
-    response = session.get(url_today)
-
-    img_html_element = response.html.find('.wp-post-image')
-
-    url_img = img_html_element[0].attrs['src']
-
-    print("Fetching data from the website ")
-
-    response_src = requests.get(url_img, stream=True)
-
-    print("Getting source from"+url_img)
-
-    with open(file_name, 'wb') as out_file:
-        shutil.copyfileobj(response_src.raw, out_file)
-    del response_src
-
-    print("Illustration saved")
+print("Illustration saved")

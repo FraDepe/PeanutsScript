@@ -1,27 +1,13 @@
 #script per avviare lo scraper e mostrare l'immagine
 main() {
-    script_name=$1
+    script_path=$1
 
     if [[ `which python` == *"/python" ]] 
     then
-        python ${script}
+        python ${script_path}
     elif [[ `which python3` == *"/python3" ]]
     then
-        python3 ${script}
-    else
-        echo "please install python or python3"
-    fi
-}
-
-main_custom_path() {
-    script_name=$1
-
-    if [[ `which python` == *"/python" ]] 
-    then
-        python ${script}
-    elif [[ `which python3` == *"/python3" ]]
-    then
-        python3 ${script}
+        python3 ${script_path}
     else
         echo "please install python or python3"
     fi
@@ -41,7 +27,7 @@ show(){
     then
         display ${img}&
     else
-        echo "please install display or choose a different command using -c option"
+        echo "Please install display or choose a different command using -c option"
     fi
 
 }
@@ -50,14 +36,13 @@ help() {
 
     # Display Help
     echo "Options to show or not downloaded image"
+    echo "WIth no options will just download newer illustration"
     echo
-    echo "Syntax: getPeanuts.sh [-s|h|c|p]"
+    echo "Syntax: getPeanuts.sh [-s|h|c]"
     echo "options:"
     echo "s     Save and show latest illustration."
     echo "h     Print this Help."
     echo "c     Specify command to show image (default is display)."
-    echo "p     Specify path (absolute) where to download image"
-    echo "WIth no options will just download newer illustration"
     echo
 
 }
@@ -77,30 +62,52 @@ custom_show(){
 
     eval "$entire_command"
 
+}
+
+getPath(){
+    
+    #script=`find $(dirname "$0") -name "get_path.py"`
+#
+    #if [[ `which python` == *"/python" ]] 
+    #then
+    #    path=$(python ${script} | tail -0)
+    #elif [[ `which python3` == *"/python3" ]]
+    #then
+    #    path=$(python3 ${script} | tail -0)
+    #else
+    #    echo "please install python or python3"
+    #fi
+    
+
+    config_path=`find $(dirname $0) -name "peanuts_config.json"`
+
+    path=`grep -o '"path": "[^"]*' $config_path | grep -o '[^"]*$'`
+
+    echo ${path}
 
 }
 
 script=`find $(dirname "$0") -name "peanuts.py"`
-peanuts_folder=`find $HOME -name "Peanuts"`
+peanuts_folder=$(getPath)
+
 
 while getopts ":h :s c: p:" option; do
     case $option in 
         h) # display Help
             help
             exit;;
+
         s) # Save and show latest illustration
             main "$script"
             show "$peanuts_folder"
             exit;;
-        c) 
+
+        c) # Save and show latest illustration with the command specified
             command=$OPTARG
             main "$script"
             custom_show "$command" "$peanuts_folder"
             exit;;
-        p) 
-            path=$OPTARG
-            main_custom_path "$script" $path
-            exit;;
+
         \?) # Invalid option
             echo "Error: Invalid option"
             echo "Try using -h"
