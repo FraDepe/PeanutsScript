@@ -1,4 +1,4 @@
-#script per avviare lo scraper e mostrare l'immagine
+
 main() {
     script_path=$1
 
@@ -65,19 +65,6 @@ custom_show(){
 }
 
 getPath(){
-    
-    #script=`find $(dirname "$0") -name "get_path.py"`
-#
-    #if [[ `which python` == *"/python" ]] 
-    #then
-    #    path=$(python ${script} | tail -0)
-    #elif [[ `which python3` == *"/python3" ]]
-    #then
-    #    path=$(python3 ${script} | tail -0)
-    #else
-    #    echo "please install python or python3"
-    #fi
-    
 
     config_path=`find $(dirname $0) -name "peanuts_config.json"`
 
@@ -89,7 +76,6 @@ getPath(){
 
 script=`find $(dirname "$0") -name "peanuts.py"`
 peanuts_folder=$(getPath)
-
 
 while getopts ":h :s c: p:" option; do
     case $option in 
