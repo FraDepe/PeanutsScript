@@ -104,16 +104,20 @@ response = session.get(url_today)
 
 img_html_element = response.html.find('.wp-post-image')
 
-url_img = img_html_element[0].attrs['src']
+try:
+    url_img = img_html_element[0].attrs['src']
+    
+    print("Fetching data from the website ")
 
-print("Fetching data from the website ")
+    response_src = requests.get(url_img, stream=True)
 
-response_src = requests.get(url_img, stream=True)
+    print("Getting source from "+url_img)
 
-print("Getting source from "+url_img)
+    with open(file_name, 'wb') as out_file:
+        shutil.copyfileobj(response_src.raw, out_file)
+    del response_src
 
-with open(file_name, 'wb') as out_file:
-    shutil.copyfileobj(response_src.raw, out_file)
-del response_src
+    print("Illustration saved")
 
-print("Illustration saved")
+except:
+    print("No illustrations have been uploaded today")
