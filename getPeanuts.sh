@@ -13,11 +13,11 @@ main() {
     fi
 }
 
-show(){
+show(){     
 
     img_folder=$1
 
-    img=`ls -Art ${img_folder} | tail -n 1`
+    img=`ls ${img_folder} | tail -n 1`
 
     img="${img_folder}/${img}"
 
