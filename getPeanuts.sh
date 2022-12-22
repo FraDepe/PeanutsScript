@@ -1,5 +1,6 @@
 
 main() {
+
     script_path=$1
 
     if [[ `which python` == *"/python" ]] 
@@ -40,9 +41,10 @@ help() {
     echo
     echo "Syntax: getPeanuts.sh [-s|h|c]"
     echo "options:"
-    echo "s     Save and show latest illustration."
-    echo "h     Print this Help."
-    echo "c     Specify command to show image (default is display)."
+    echo "s     Save and show latest illustration"
+    echo "h     Print this Help"
+    echo "c     Specify command to show image (default is display)"
+    echo "d     Specify a date using format dd/mm/yyyy"
     echo
 
 }
@@ -74,10 +76,28 @@ getPath(){
 
 }
 
+main_with_date(){
+    
+    script_path=$1
+    date=$2
+
+    if [[ `which python` == *"/python" ]] 
+    then
+        python ${script_path} ${date}
+    elif [[ `which python3` == *"/python3" ]]
+    then
+        python3 ${script_path} ${date}
+    else
+        echo "please install python or python3"
+    fi
+
+
+}
+
 script=`find $(dirname "$0") -name "peanuts.py"`
 peanuts_folder=$(getPath)
 
-while getopts ":h :s c: p:" option; do
+while getopts ":h :s c: p: d:" option; do
     case $option in 
         h) # display Help
             help
@@ -92,6 +112,10 @@ while getopts ":h :s c: p:" option; do
             command=$OPTARG
             main "$script"
             custom_show "$command" "$peanuts_folder"
+            exit;;
+
+        d)  # Download illustration of a specific date
+            main_with_date "$script" "$OPTARG"
             exit;;
 
         \?) # Invalid option
