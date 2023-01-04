@@ -86,8 +86,8 @@ def main():
 
     url_today = "https://www.ilpost.it/"+year+"/"+month+"/"+day+"/"+"peanuts-"+year+"-"+mesi[month]+"-"+day
 
-    file_name =peanuts_folder+"/Peanuts-"+year+"-"+month+"-"+day+".jpg"
-    short_file_name = "Peanuts-"+year+"-"+month+"-"+day+".jpg"
+    file_name =peanuts_folder+"/Peanuts-"+day+"-"+month+"-"+year+".jpg"
+    short_file_name = "Peanuts-"+day+"-"+month+"-"+year+".jpg"
 
     print("Visiting "+url_today)
 
